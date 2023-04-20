@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
+
+  <title>Frontend Mentor | Age calculator app</title>
+
+  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+  <style>
+    .attribution {
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .attribution a {
+      color: hsl(228, 45%, 44%);
+    }
+  </style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+  </style>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <main>
+    <div class="container">
+      <form action="" id="form">
+        <span>
+          <label for="date">DAY</label>
+          <input type="number" name="date" id="date">
+          <p class="hidden">Must be a vaild date</p>
+        </span>
+        <span>
+          <label for="date">MONTH</label>
+          <input type="number" name="month" id="month">
+          <p class="hidden">Must be a vaild month</p>
+        </span>
+        <span>
+          <label for="date">YEAR</label>
+          <input type="number" name="year" id="year">
+          <p class="hidden">Must be a year past</p>
+        </span>
+        <span class="space">
+        </span>
+        <button type="submit"><img src="/assets/images/icon-arrow.svg" alt=""></button>
+
+      </form>
+      <div id="output">
+        <div><span id="leftyear">--</span>years</div>
+        <div><span id="leftmonth">--</span>month</div>
+        <div><span id="leftday">--</span>days</div>
+      </div>
+    </div>
+  </main>
+
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+    Coded by <a href="#">Your Name Here</a>.
+  </div>
+
+  <script>
+    const form = document.querySelector("#form");
+    const output = document.querySelector("#output");
+    const year = document.querySelector("#leftyear");
+    const month = document.querySelector("#leftmonth");
+    const day = document.querySelector("#leftday");
+
+    form.addEventListener("submit", function (data) {
+      data.preventDefault();
+
+      styleUpdate();
+      const currentDate = new Date();
+      const currentDay = currentDate.getDate();
+      const currentMonth = currentDate.getMonth() + 1;
+      const currentYear = currentDate.getFullYear() + 1;
+
+      const formData = new FormData(data.target);
+      const birthDay = formData.get('date');
+      const birthMonth = formData.get('month');
+      const birthYear = formData.get('year');
+      const validiate = valid(birthDay, birthMonth, birthYear, currentYear);
+      styleChange(validiate);
+      if (!validiate.includes(false)) {
+        const leftDate = findAge(birthDay, birthMonth, birthYear, currentDay, currentMonth, currentYear);
+        year.innerHTML = leftDate[2];
+        month.innerHTML = leftDate[1];
+        day.innerHTML = leftDate[0];
+      }
+    })
+
+    function findAge(bDay, bMonth, bYear, cDay, cMonth, cYear) {
+
+      const month = [31, 28, 31, 30, 31, 30
+        , 31, 31, 30, 31, 30, 31]
+
+      if (cDay < bDay) {
+        cDay += month[cMonth - 1];
+        cMonth -= 1;
+      }
+
+      if (cMonth < bMonth) {
+        cMonth += 12;
+        cYear -= 1;
+      }
+
+      const lDay = cDay - bDay;
+      const lMonth = cMonth - bMonth;
+      const lYear = cYear - bYear;
+
+      return [lDay, lMonth, lYear];
+    }
+
+    function valid(bDay, bMonth, bYear, cYear) {
+      let dayValid = false;
+      let monthValid = false;
+      let yearValid = false;
+
+
+      if (bDay > 0 && bDay <= 31) {
+        if (bMonth === 2 && bDay >= 29) {
+          dayValid = false
+        } else if (bMonth % 2 === 0 && bDay >= 30) {
+          dayValid = false
+        } else {
+          dayValid = true
+        }
+      }
+
+      if (bMonth > 0 && bMonth <= 12) {
+        monthValid = true;
+      }
+
+      if (bYear > 0000 && bYear < cYear) {
+        yearValid = true;
+      }
+
+      return [dayValid, monthValid, yearValid];
+    }
+
+    function styleChange(left) {
+      const labels = document.querySelectorAll("label");
+      const inputs = document.querySelectorAll("input");
+      const hidden = document.querySelectorAll(".hidden");
+      for (let i = 0; i < 3; i++) {
+        if (left[i] === false) {
+          labels[i].style.color = "hsl(0, 100%, 67%)";
+          inputs[i].style.borderColor = "hsl(0, 100%, 67%)";
+          hidden[i].style.display = "block";
+        }
+      }
+      return;
+    }
+
+    function styleUpdate() {
+      const labels = document.querySelectorAll("label");
+      const inputs = document.querySelectorAll("input");
+      const hidden = document.querySelectorAll(".hidden");
+      for (let i = 0; i < 3; i++) {
+        labels[i].style.color = "hsl(0, 0%, 86%)";
+        inputs[i].style.borderColor = "hsl(0, 0%, 86%)";
+        hidden[i].style.display = "none";
+      }
+    }
+  </script>
+</body>
+
+</html>
