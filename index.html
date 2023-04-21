@@ -122,11 +122,10 @@
       let monthValid = false;
       let yearValid = false;
 
-
       if (bDay > 0 && bDay <= 31) {
         if (bMonth === 2 && bDay >= 29) {
           dayValid = false
-        } else if (bMonth % 2 === 0 && bDay >= 30) {
+        } else if (bMonth % 2 === 0 && bDay > 30) {
           dayValid = false
         } else {
           dayValid = true
