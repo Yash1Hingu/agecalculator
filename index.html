@@ -122,14 +122,11 @@
       let monthValid = false;
       let yearValid = false;
 
-      if (bDay > 0 && bDay <= 31) {
-        if (bMonth === 2 && bDay >= 29) {
-          dayValid = false
-        } else if (bMonth % 2 === 0 && bDay > 30) {
-          dayValid = false
-        } else {
-          dayValid = true
-        }
+      const month = [31, 28, 31, 30, 31, 30
+        , 31, 31, 30, 31, 30, 31]
+
+      if (bDay > 0 && bDay <= month[bMonth-1]) {
+        dayValid = true
       }
 
       if (bMonth > 0 && bMonth <= 12) {
